@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/stylesheets/base.css">
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+    <link rel="stylesheet" href="/stylesheets/ui-components.css">
+    <link rel="stylesheet" href="/stylesheets/business-components.css">
+    <link rel="stylesheet" href="/stylesheets/pages.css">
+</head>
+<body>
+    
+    <%- include('partials/navbar') %>
+    
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h1 class="fw-bold">
+                        <i class="bi bi-bag-check text-primary me-2"></i>
+                        I miei ordini
+                    </h1>
+                    <p class="text-muted"><%= orders.length %> ordine/i</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <select class="form-select d-inline-block w-auto" id="filter-status">
+                        <option value="">Tutti gli ordini</option>
+                        <option value="pending">In attesa</option>
+                        <option value="confirmed">Confermato</option>
+                        <option value="preparing">In preparazione</option>
+                        <option value="ready">Pronto</option>
+                        <option value="delivered">Consegnato</option>
+                        <option value="cancelled">Annullato</option>
+                    </select>
+                </div>
+            </div>
+
+            <% if (locals.error) { %>
+                <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+
+            <% if (orders && orders.length > 0) { %>
+                <% orders.forEach(order => { 
+                    const statusColors = {
+                        'pending': 'warning',
+                        'confirmed': 'info',
+                        'preparing': 'primary',
+                        'ready': 'success',
+                        'delivered': 'success',
+                        'cancelled': 'danger'
+                    };
+                    const statusLabels = {
+                        'pending': 'In attesa',
+                        'confirmed': 'Confermato',
+                        'preparing': 'In preparazione',
+                        'ready': 'Pronto',
+                        'delivered': 'Consegnato',
+                        'cancelled': 'Annullato'
+                    };
+                    const statusIcons = {
+                        'pending': 'hourglass-split',
+                        'confirmed': 'check-circle',
+                        'preparing': 'fire',
+                        'ready': 'check-circle-fill',
+                        'delivered': 'check-all',
+                        'cancelled': 'x-circle'
+                    };
+                %>
+                    <div class="order-card fade-in mb-4" data-status="<%= order.status %>">
+                        <div class="order-header">
+                            <div>
+                                <h5 class="order-id mb-1">Ordine #<%= order.id %></h5>
+                                <p class="text-muted mb-0">
+                                    <i class="bi bi-shop me-1"></i> <%= order.restaurant_name %>
+                                </p>
+                                <small class="text-muted">
+                                    <i class="bi bi-clock me-1"></i> 
+                                    <%= new Date(order.created_at).toLocaleString('it-IT') %>
+                                </small>
+                            </div>
+                            <span class="order-status <%= order.status %>">
+                                <i class="bi bi-<%= statusIcons[order.status] %> me-1"></i>
+                                <%= statusLabels[order.status] %>
+                            </span>
+                        </div>
+
+                        <div class="order-body">
+                            <p class="mb-2">
+                                <i class="bi bi-geo-alt text-danger me-1"></i>
+                                <strong>Consegna:</strong> <%= order.delivery_address %>
+                            </p>
+
+                            <div class="order-total">
+                                Totale: <strong>€ <%= parseFloat(order.total_price).toFixed(2) %></strong>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox text-muted icon-xxl"></i>
+                    <h3 class="mt-4 text-muted">Nessun ordine</h3>
+                    <p class="text-muted">Non hai ancora effettuato ordini</p>
+                    <a href="/restaurants" class="btn btn-primary mt-3">
+                        <i class="bi bi-shop me-2"></i>Esplora i ristoranti
+                    </a>
+                </div>
+            <% } %>
+        </div>
+    </section>
+    
+    <%- include('partials/footer') %>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/javascripts/client.js"></script>
+</body>
+</html>

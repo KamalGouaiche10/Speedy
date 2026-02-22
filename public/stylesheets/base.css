@@ -1,0 +1,148 @@
+:root {
+    --primary-color: #FF6B6B;
+    --primary-dark: #E85D5D;
+    --primary-light: #FFB5B5;
+    --secondary-color: #6c757d;
+    --success-color: #51CF66;
+    --danger-color: #FF6B6B;
+    --warning-color: #FFB84D;
+    --dark-color: #2D3436;
+    
+    --font-primary: 'Poppins', sans-serif;
+    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-sm: 0 2px 8px rgba(255, 107, 107, 0.1);
+    --shadow-md: 0 4px 16px rgba(255, 107, 107, 0.15);
+    --shadow-lg: 0 8px 32px rgba(255, 107, 107, 0.2);
+}
+
+/*RESET E BASE */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    line-height: 1.6;
+    color: var(--dark-color);
+    background-color: #FAFAFA;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* SECTIONS GENERICHE */
+section {
+    padding: 4rem 0;
+}
+
+.section-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 1rem;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #FF6B6B, #E85D5D);
+    border-radius: 2px;
+    margin: 0.8rem auto 0;
+}
+
+/* UTILITY CLASSES */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 991.98px) {
+    .hero-section h1,
+    .hero-section .display-3 {
+        font-size: 2.5rem;
+    }
+
+    .hero-stats {
+        gap: 0;
+    }
+
+    .hero-stat-item {
+        padding: 0 1.2rem;
+    }
+
+    .cuisine-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero-section {
+        padding: 60px 0 50px;
+    }
+
+    .hero-section h1,
+    .hero-section .display-3 {
+        font-size: 2rem;
+    }
+
+    .hero-section .lead {
+        font-size: 1rem;
+    }
+
+    .hero-stat-item {
+        padding: 0 0.8rem;
+    }
+
+    .hero-stat-value {
+        font-size: 1.2rem;
+    }
+
+    .cuisine-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+
+    .cta-card {
+        padding: 3rem 1.5rem;
+    }
+
+    .cta-title {
+        font-size: 1.6rem;
+    }
+
+    .step-card {
+        padding: 2rem 1.5rem;
+    }
+}

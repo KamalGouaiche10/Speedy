@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/stylesheets/base.css">
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+    <link rel="stylesheet" href="/stylesheets/ui-components.css">
+    <link rel="stylesheet" href="/stylesheets/business-components.css">
+    <link rel="stylesheet" href="/stylesheets/pages.css">
+</head>
+<body>
+    
+    <%- include('partials/navbar') %>
+    
+    <section class="py-5">
+        <div class="form-container">
+            <h2>
+                <i class="bi bi-person-plus text-primary me-2"></i>
+                Registrati
+            </h2>
+
+            <% if (locals.error) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <% if (typeof validationErrors !== 'undefined' && validationErrors.length > 0) { %>
+                <div class="alert alert-danger" role="alert">
+                    <ul class="mb-0">
+                        <% validationErrors.forEach(function(err) { %>
+                            <li><%= err.msg %></li>
+                        <% }) %>
+                    </ul>
+                </div>
+            <% } %>
+
+            <form id="register-form" action="/api/auth/register" method="POST">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nome *</label>
+                    <input type="text" class="form-control" id="name" name="name" required value="<%= typeof formData !== 'undefined' ? formData.name || '' : '' %>">
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email *</label>
+                    <input type="email" class="form-control" id="email" name="email" required value="<%= typeof formData !== 'undefined' ? formData.email || '' : '' %>">
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password *</label>
+                    <input type="password" class="form-control" id="password" name="password" 
+                           required minlength="6">
+                    <div class="form-text">Minimo 6 caratteri</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="role" class="form-label">Tipo account *</label>
+                    <select class="form-select" id="role" name="role" required>
+                        <option value="">Seleziona...</option>
+                        <option value="customer" <%= typeof formData !== 'undefined' && formData.role === 'customer' ? 'selected' : '' %>>Cliente</option>
+                        <option value="restaurant" <%= typeof formData !== 'undefined' && formData.role === 'restaurant' ? 'selected' : '' %>>Ristoratore</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Telefono</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" value="<%= typeof formData !== 'undefined' ? formData.phone || '' : '' %>">
+                </div>
+
+                <div class="mb-3">
+                    <label for="address" class="form-label">Indirizzo</label>
+                    <input type="text" class="form-control" id="address" name="address" value="<%= typeof formData !== 'undefined' ? formData.address || '' : '' %>">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-submit">
+                    <i class="bi bi-person-plus me-2"></i>
+                    Registrati
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="text-muted">Hai già un account?</p>
+                <a href="/login" class="btn btn-outline-primary">
+                    Accedi
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <%- include('partials/footer') %>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/javascripts/client.js"></script>
+</body>
+</html>

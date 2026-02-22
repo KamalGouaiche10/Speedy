@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/stylesheets/base.css">
+    <link rel="stylesheet" href="/stylesheets/layout.css">
+    <link rel="stylesheet" href="/stylesheets/ui-components.css">
+    <link rel="stylesheet" href="/stylesheets/business-components.css">
+    <link rel="stylesheet" href="/stylesheets/pages.css">
+</head>
+<body>
+    
+    <%- include('partials/navbar') %>
+    
+    <section class="py-5">
+        <div class="container">
+            <h1 class="fw-bold mb-4">
+                <i class="bi bi-shield-check text-primary me-2"></i>
+                Pannello Amministratore
+            </h1>
+
+            <!-- Statistiche -->
+            <div class="row mb-5">
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <i class="bi bi-people stat-icon text-primary"></i>
+                        <div class="stat-value"><%= stats.totalUsers %></div>
+                        <div class="stat-label">Utenti totali</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <i class="bi bi-shop stat-icon text-success"></i>
+                        <div class="stat-value"><%= stats.totalRestaurants %></div>
+                        <div class="stat-label">Ristoranti</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <i class="bi bi-receipt stat-icon text-info"></i>
+                        <div class="stat-value"><%= stats.totalOrders %></div>
+                        <div class="stat-label">Ordini totali</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <i class="bi bi-currency-euro stat-icon text-warning"></i>
+                        <div class="stat-value">€ <%= parseFloat(stats.totalRevenue).toFixed(2) %></div>
+                        <div class="stat-label">Fatturato</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs mb-4" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#admin-users">
+                        <i class="bi bi-people me-2"></i>Utenti
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#admin-restaurants">
+                        <i class="bi bi-shop me-2"></i>Ristoranti
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#admin-reviews">
+                        <i class="bi bi-chat-quote me-2"></i>Recensioni
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- Utenti -->
+                <div class="tab-pane fade show active" id="admin-users">
+                    <div class="admin-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Email</th>
+                                    <th>Ruolo</th>
+                                    <th>Registrato</th>
+                                    <th>Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% users.forEach(u => { 
+                                    const roleBadges = {
+                                        'customer': 'primary',
+                                        'restaurant': 'success',
+                                        'admin': 'danger'
+                                    };
+                                    const roleLabels = {
+                                        'customer': 'Cliente',
+                                        'restaurant': 'Ristoratore',
+                                        'admin': 'Admin'
+                                    };
+                                %>
+                                    <tr>
+                                        <td><%= u.id %></td>
+                                        <td><%= u.name %></td>
+                                        <td><%= u.email %></td>
+                                        <td>
+                                            <span class="badge bg-<%= roleBadges[u.role] %>">
+                                                <%= roleLabels[u.role] %>
+                                            </span>
+                                        </td>
+                                        <td><%= new Date(u.created_at).toLocaleDateString('it-IT') %></td>
+                                        <td>
+                                            <% if (u.role !== 'admin') { %>
+                                                <button class="btn btn-sm btn-danger btn-delete-user" 
+                                                        data-user-id="<%= u.id %>">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            <% } else { %>
+                                                -
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Ristoranti -->
+                <div class="tab-pane fade" id="admin-restaurants">
+                    <div class="admin-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Proprietario</th>
+                                    <th>Status</th>
+                                    <th>Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% restaurants.forEach(r => { %>
+                                    <tr id="restaurant-row-<%= r.id %>">
+                                        <td><%= r.id %></td>
+                                        <td><%= r.name %></td>
+                                        <td><%= r.owner_name || '-' %></td>
+                                        <td>
+                                            <span class="badge bg-<%= r.status === 'active' ? 'success' : 'danger' %>" 
+                                                id="status-badge-<%= r.id %>">
+                                                <%= r.status === 'active' ? 'Attivo' : 'Bloccato' %>
+                                            </span>
+                                        </td>
+                                        <td class="admin-actions">
+                                            <button class="btn btn-sm btn-<%= r.status === 'active' ? 'warning' : 'success' %> btn-toggle-status" 
+                                                    id="toggle-btn-<%= r.id %>"
+                                                    data-restaurant-id="<%= r.id %>"
+                                                    data-current-status="<%= r.status %>"
+                                                    title="<%= r.status === 'active' ? 'Blocca ristorante' : 'Sblocca ristorante' %>">
+                                                <i class="bi bi-<%= r.status === 'active' ? 'lock' : 'unlock' %>"></i>
+                                                <%= r.status === 'active' ? 'Blocca' : 'Sblocca' %>
+                                            </button>
+                                            
+                                            <button class="btn btn-sm btn-danger btn-delete-restaurant" 
+                                                    data-restaurant-id="<%= r.id %>"
+                                                    title="Elimina ristorante">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recensioni -->
+                <div class="tab-pane fade" id="admin-reviews">
+                    <% if (reviews && reviews.length > 0) { %>
+                        <% reviews.forEach(review => { %>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <strong><%= review.user_name %></strong> su 
+                                            <strong><%= review.restaurant_name %></strong>
+                                            <div class="text-warning">
+                                                <% for (let i = 0; i < review.rating; i++) { %>★<% } %>
+                                                <% for (let i = review.rating; i < 5; i++) { %>☆<% } %>
+                                            </div>
+                                            <p class="mt-2"><%= review.comment || '' %></p>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-danger btn-delete-review" 
+                                                    data-review-id="<%= review.id %>">
+                                                <i class="bi bi-trash"></i> Elimina
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-muted">Nessuna recensione</p>
+                    <% } %>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    
+    <%- include('partials/footer') %>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/javascripts/admin.js"></script>
+</body>
+</html>
