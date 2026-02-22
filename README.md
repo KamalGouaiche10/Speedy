@@ -86,10 +86,6 @@ Password: cliente123
 ```
 **Accesso**: Visualizzazione ristoranti, effettuazione ordini, recensioni
 
-## Risorse
-
-- **Tutorial Video**: [https://youtu.be/bKdXXcb3zo0](https://youtu.be/bKdXXcb3zo0)
-
 ## Struttura del Progetto
 
 ```
