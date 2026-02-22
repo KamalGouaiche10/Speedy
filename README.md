@@ -142,6 +142,50 @@ speedy/
 - ⭐ Lasciare recensioni e valutazioni
 - 👤 Gestire profilo personale
 
+## API REST
+
+La piattaforma utilizza un'architettura REST con Express.js. Di seguito sono elencati i principali endpoint:
+
+### Autenticazione
+- `POST /auth/login` - Login utente
+- `POST /auth/register` - Registrazione nuovo utente
+- `GET /auth/logout` - Logout utente
+
+### Ristoranti
+- `GET /api/restaurants` - Lista di tutti i ristoranti
+- `GET /api/restaurants/:id` - Dettagli ristorante specifico
+- `POST /api/restaurants` - Creazione nuovo ristorante (admin)
+- `PUT /api/restaurants/:id` - Aggiornamento ristorante
+
+### Menu
+- `GET /api/menu/:restaurantId` - Menu del ristorante
+- `GET /api/menu/:restaurantId/items` - Tutti i piatti del menu
+- `POST /api/menu/:restaurantId/items` - Aggiunta piatto (ristorante)
+- `PUT /api/menu/:restaurantId/items/:itemId` - Aggiornamento piatto
+- `DELETE /api/menu/:restaurantId/items/:itemId` - Eliminazione piatto
+
+### Ordini
+- `GET /api/orders` - Lista ordini (filtrato per utente)
+- `GET /api/orders/:id` - Dettagli ordine specifico
+- `POST /api/orders` - Creazione nuovo ordine
+- `PUT /api/orders/:id` - Aggiornamento stato ordine
+- `GET /api/orders/restaurant/:restaurantId` - Ordini del ristorante
+
+### Utenti
+- `GET /api/users/:id` - Profilo utente
+- `PUT /api/users/:id` - Aggiornamento profilo
+- `GET /api/users` - Lista utenti (admin)
+
+### Recensioni
+- `GET /api/reviews/:restaurantId` - Recensioni ristorante
+- `POST /api/reviews` - Aggiunta recensione
+- `PUT /api/reviews/:id` - Aggiornamento recensione
+- `DELETE /api/reviews/:id` - Eliminazione recensione
+
+## Sviluppo
+
+Per lo sviluppo con hot-reload, le dipendenze includono Nodemon che riavvia il server automaticamente al salvataggio dei file.
+
 ## Autore
 
 **Kamal Gouaiche** 
